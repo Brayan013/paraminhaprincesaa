@@ -18,12 +18,60 @@
       overflow-y: auto;
     }
 
-    #senhaContainer {
+    #heart-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 9999;
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      transform: rotate(45deg);
+      animation: fall 5s linear infinite;
+      pointer-events: none;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      border-radius: 50%;
+    }
+
+    .heart::before { top: -10px; left: 0; }
+    .heart::after { top: 0; left: -10px; }
+
+    @keyframes fall {
+      0% { transform: translateY(-10%) rotate(45deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(45deg); opacity: 0; }
+    }
+
+    #senhaContainer, #startContainer {
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
+    }
+
+    #startContainer { display: none; }
+
+    #mainContent {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
     }
 
     #senhaInput {
@@ -37,7 +85,7 @@
       text-align: center;
     }
 
-    #senhaBtn {
+    #senhaBtn, #startBtn, #toggleAudioBtn {
       font-size: 1.2rem;
       padding: 10px 20px;
       background-color: #e91e63;
@@ -46,39 +94,16 @@
       border-radius: 10px;
       cursor: pointer;
       transition: 0.3s;
-    }
-
-    #senhaBtn:hover {
-      background-color: #d81b60;
-    }
-
-    #startContainer {
-      height: 100vh;
-      display: none;
-      justify-content: center;
-      align-items: center;
+      margin: 5px;
     }
 
     #startBtn {
       font-size: 2rem;
       padding: 20px 40px;
-      background-color: #e91e63;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.3s;
     }
 
-    #startBtn:hover {
+    #senhaBtn:hover, #startBtn:hover, #toggleAudioBtn:hover {
       background-color: #d81b60;
-    }
-
-    #mainContent {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
     }
 
     .spotify-player {
@@ -91,8 +116,8 @@
     }
 
     .carousel {
-      width: 300px;
-      height: 200px;
+      width: 400px;
+      height: 500px;
       overflow: hidden;
       border-radius: 10px;
       position: relative;
@@ -117,7 +142,7 @@
 
     .message {
       font-size: 1.2rem;
-      max-width: 500px;
+      max-width: 600px;
       margin-bottom: 20px;
       white-space: pre-wrap;
     }
@@ -130,6 +155,7 @@
   </style>
 </head>
 <body>
+  <div id="heart-container"></div>
 
   <div id="senhaContainer">
     <h2>🔒 Digite a senha para acessar:</h2>
@@ -143,10 +169,13 @@
 
   <div id="mainContent">
     <h1>💖 Feliz Dia dos Namorados 💖</h1>
+
     <div class="spotify-player">
       🎵 Tocando: Amor de Verdade - MC Kekel e MC Rita
       <br>
       <audio id="loveAudio" src="AmorDeVerdade.mp3" loop></audio>
+      <br>
+      <button id="toggleAudioBtn">⏸️ Pausar Música</button>
     </div>
 
     <div class="carousel" id="carousel">
@@ -187,12 +216,13 @@ Com todo carinho, Seu Príncipe 🥹😘"
 
   <script>
     const senhaCorreta = "20102021";
-    const senhaContainer = document.getElementById('senhaContainer');
     const senhaInput = document.getElementById('senhaInput');
     const senhaBtn = document.getElementById('senhaBtn');
+    const senhaContainer = document.getElementById('senhaContainer');
     const startContainer = document.getElementById('startContainer');
     const mainContent = document.getElementById('mainContent');
     const audio = document.getElementById('loveAudio');
+    const toggleAudioBtn = document.getElementById('toggleAudioBtn');
 
     senhaBtn.addEventListener('click', () => {
       if (senhaInput.value === senhaCorreta) {
@@ -203,16 +233,24 @@ Com todo carinho, Seu Príncipe 🥹😘"
       }
     });
 
-    const startBtn = document.getElementById('startBtn');
-    startBtn.addEventListener('click', () => {
+    document.getElementById('startBtn').addEventListener('click', () => {
       startContainer.style.display = 'none';
       mainContent.style.display = 'flex';
       audio.volume = 0.7;
-      audio.play().catch(() => console.log('Autoplay bloqueado pelo navegador'));
-      window.scrollTo(0, 0);
+      audio.play().catch(() => console.log('Autoplay bloqueado'));
+      startHeartRain();
     });
 
-    // Carrossel
+    toggleAudioBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        toggleAudioBtn.textContent = "⏸️ Pausar Música";
+      } else {
+        audio.pause();
+        toggleAudioBtn.textContent = "▶️ Tocar Música";
+      }
+    });
+
     const images = document.querySelectorAll('.carousel img');
     let currentIndex = 0;
     setInterval(() => {
@@ -221,14 +259,11 @@ Com todo carinho, Seu Príncipe 🥹😘"
       images[currentIndex].classList.add('active');
     }, 5000);
 
-    // Contador
     const timer = document.getElementById('timer');
     const startDate = new Date('2021-10-20T14:00:00');
-
     function updateTimer() {
       const now = new Date();
       let diff = now - startDate;
-
       const seconds = Math.floor((diff / 1000) % 60);
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
       const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
@@ -238,8 +273,20 @@ Com todo carinho, Seu Príncipe 🥹😘"
 
       timer.textContent = `Eu Te Amo À: ❤️ ${years} ano(s), ${months} mês(es), ${days} dia(s), ${hours} hora(s), ${minutes} minuto(s) e ${seconds} segundo(s).`;
     }
-
     setInterval(updateTimer, 1000);
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+      document.getElementById('heart-container').appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
+    }
+
+    function startHeartRain() {
+      setInterval(createHeart, 200);
+    }
   </script>
 </body>
 </html>
