@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>❤️ Para Minha Princesa ❤️</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -21,9 +18,43 @@
       overflow-y: auto;
     }
 
-    #startContainer {
+    #senhaContainer {
       height: 100vh;
       display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    #senhaInput {
+      font-size: 1.2rem;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+      width: 200px;
+      text-align: center;
+    }
+
+    #senhaBtn {
+      font-size: 1.2rem;
+      padding: 10px 20px;
+      background-color: #e91e63;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #senhaBtn:hover {
+      background-color: #d81b60;
+    }
+
+    #startContainer {
+      height: 100vh;
+      display: none;
       justify-content: center;
       align-items: center;
     }
@@ -100,6 +131,12 @@
 </head>
 <body>
 
+  <div id="senhaContainer">
+    <h2>🔒 Digite a senha para acessar:</h2>
+    <input type="password" id="senhaInput" placeholder="Senha" />
+    <button id="senhaBtn">Entrar</button>
+  </div>
+
   <div id="startContainer">
     <button id="startBtn">❤️ Clique Aqui ❤️</button>
   </div>
@@ -149,23 +186,35 @@ Com todo carinho, Seu Príncipe 🥹😘"
   </div>
 
   <script>
-    const startBtn = document.getElementById('startBtn');
+    const senhaCorreta = "20102021";
+    const senhaContainer = document.getElementById('senhaContainer');
+    const senhaInput = document.getElementById('senhaInput');
+    const senhaBtn = document.getElementById('senhaBtn');
     const startContainer = document.getElementById('startContainer');
     const mainContent = document.getElementById('mainContent');
     const audio = document.getElementById('loveAudio');
 
+    senhaBtn.addEventListener('click', () => {
+      if (senhaInput.value === senhaCorreta) {
+        senhaContainer.style.display = 'none';
+        startContainer.style.display = 'flex';
+      } else {
+        alert("Senha incorreta!");
+      }
+    });
+
+    const startBtn = document.getElementById('startBtn');
     startBtn.addEventListener('click', () => {
       startContainer.style.display = 'none';
       mainContent.style.display = 'flex';
       audio.volume = 0.7;
       audio.play().catch(() => console.log('Autoplay bloqueado pelo navegador'));
-      window.scrollTo(0, 0); // Garante que comece do topo
+      window.scrollTo(0, 0);
     });
 
     // Carrossel
     const images = document.querySelectorAll('.carousel img');
     let currentIndex = 0;
-
     setInterval(() => {
       images[currentIndex].classList.remove('active');
       currentIndex = (currentIndex + 1) % images.length;
