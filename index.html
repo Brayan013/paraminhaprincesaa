@@ -1,40 +1,616 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html><html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>❤️ Para Minha Princesa ❤️</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>❤️ Para Minha Princesa — Versão Premium ❤️</title>
+  <meta name="description" content="Uma página romântica, interativa e responsiva para celebrar o Dia dos Namorados." />
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #111;
-      color: white;
-      text-align: center;
-      padding: 20px;
-      min-height: 100vh;
-      overflow-x: hidden;
-      overflow-y: auto;
+    /* --------------------------------------------------
+       Reset & Base
+    -------------------------------------------------- */
+    :root{
+      --bg-1: linear-gradient(120deg,#0f172a 0%, #1f2937 40%, #3b185f 100%);
+      --accent: #ff5c8a;
+      --accent-2: #ffd166;
+      --glass: rgba(255,255,255,0.06);
+      --glass-2: rgba(255,255,255,0.04);
+      --card-shadow: 0 10px 30px rgba(2,6,23,0.6);
+      --radius: 18px;
+      --max-width: 1080px;
+    }*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: var(--bg-1);
+  color: #f8fafc;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+  padding:24px;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+}
+
+.page {
+  width:100%;
+  max-width:var(--max-width);
+  margin: 30px 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border-radius: 20px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  position:relative;
+}
+
+/* --------------------------------------------------
+   Header / Hero
+-------------------------------------------------- */
+header{
+  padding:28px 34px;
+  display:flex;
+  gap:18px;
+  align-items:center;
+  justify-content:space-between;
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.brand{
+  display:flex;align-items:center;gap:14px
+}
+
+.logo{
+  width:62px;height:62px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.06), transparent 20%), linear-gradient(180deg,#ff9bb3,#ff5c8a);
+  box-shadow: 0 8px 30px rgba(255,92,138,0.14), inset 0 -6px 10px rgba(255,255,255,0.06);
+  transform: rotate(-8deg);
+}
+.logo svg{width:36px;height:36px}
+
+.brand h1{font-family:'Playfair Display', serif;font-size:20px;letter-spacing:0.2px}
+.brand p{font-size:12px;color:rgba(255,255,255,0.7)}
+
+.controls{display:flex;gap:12px;align-items:center}
+.btn{background:linear-gradient(180deg,var(--accent),#d94374);border:none;padding:10px 18px;border-radius:12px;color:white;font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.4)}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+.btn.small{padding:8px 12px;font-size:14px}
+
+/* --------------------------------------------------
+   Layout: left (visual) / right (content)
+-------------------------------------------------- */
+.content{
+  display:grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap:28px;
+  padding:28px;
+  align-items:start;
+}
+
+/* Left visual column */
+.visual{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: 16px;padding:18px;min-height:560px;position:relative;overflow:hidden
+}
+
+.frame{
+  border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border:1px solid rgba(255,255,255,0.03);
+  height: 100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:14px
+}
+
+/* Heart rain canvas */
+#canvasHearts{position:absolute;inset:0;pointer-events:none}
+
+/* Photo carousel */
+.carousel-wrap{width:100%;max-width:520px;border-radius:12px;overflow:hidden;box-shadow:0 12px 36px rgba(2,6,23,0.6);}
+.carousel{
+  position:relative; width:100%;height:420px;background:linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.2));
+  display:flex;align-items:center;justify-content:center;overflow:hidden
+}
+.carousel img{width:100%;height:100%;object-fit:cover;transition:transform .9s cubic-bezier(.22,.95,.3,1);transform-origin:center;display:block}
+.carousel .info{position:absolute;left:16px;bottom:16px;background:linear-gradient(90deg, rgba(0,0,0,0.45), rgba(0,0,0,0.25));padding:10px 14px;border-radius:12px}
+.thumbnails{display:flex;gap:8px;margin-top:12px;overflow:auto;padding-bottom:8px}
+.thumb{width:64px;height:64px;border-radius:10px;flex:0 0 auto;overflow:hidden;border:2px solid rgba(255,255,255,0.03);cursor:pointer}
+.thumb img{width:100%;height:100%;object-fit:cover}
+
+/* Right content column */
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:20px;border-radius:14px;border:1px solid rgba(255,255,255,0.03)}
+
+.greeting{font-family:'Playfair Display', serif;font-size:28px;margin-bottom:6px}
+.subtitle{color:rgba(255,255,255,0.75);margin-bottom:12px}
+
+.message-box{background:var(--glass);padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);min-height:180px;display:flex;align-items:center}
+.message-text{white-space:pre-wrap;font-size:15px;line-height:1.45}
+
+.controls-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+
+/* Timer */
+.timer{margin-top:18px;padding:12px;border-radius:12px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));display:flex;align-items:center;gap:12px}
+.timer .big{font-weight:700;color:var(--accent)}
+
+/* Audio player */
+.audio-player{display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;background:linear-gradient(90deg, rgba(0,0,0,0.18), rgba(0,0,0,0.12))}
+.progress{height:6px;border-radius:6px;background:rgba(255,255,255,0.06);overflow:hidden;width:160px}
+.progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+
+/* Footer actions */
+.footer-actions{display:flex;gap:12px;align-items:center;justify-content:flex-end;margin-top:18px}
+
+/* Modal (senha) */
+.modal-overlay{position:fixed;inset:0;background:linear-gradient(180deg, rgba(2,6,23,0.7), rgba(2,6,23,0.55));display:flex;align-items:center;justify-content:center;z-index:10000}
+.modal{width:360px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:22px;border-radius:16px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 20px 60px rgba(2,6,23,0.8)}
+.modal h3{font-size:18px;margin-bottom:8px}
+.modal p{color:rgba(255,255,255,0.75);font-size:13px;margin-bottom:12px}
+.input{width:100%;padding:12px;border-radius:12px;border:0;background:rgba(255,255,255,0.02);color:inherit;outline:none}
+
+/* small screens */
+@media (max-width:900px){
+  .content{grid-template-columns: 1fr;}
+  .carousel{height:320px}
+  .visual{min-height:420px}
+}
+
+@media (max-width:480px){
+  header{padding:18px}
+  .logo{width:50px;height:50px}
+  .greeting{font-size:20px}
+}
+
+/* subtle floating animation */
+.float{animation:floaty 6s ease-in-out infinite}
+@keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+
+/* confetti pieces for high-quality effect */
+.confetti-piece{position:absolute;left:0;top:0;width:10px;height:14px;opacity:0;pointer-events:none}
+
+  </style>
+</head>
+<body>
+  <div class="page" role="main" aria-labelledby="pageTitle">
+    <header>
+      <div class="brand">
+        <div class="logo float" aria-hidden="true">
+          <!-- small diamond/heart SVG -->
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 21s-7.5-4.9-9.6-8.4C-0.2 8.6 4.6 3 8.9 5.6 11 6.9 12 9 12 9s1-2.1 3.1-3.4C19.4 3 24.2 8.6 21.6 12.6 19.5 16.1 12 21 12 21z" fill="white" opacity="0.92"/>
+          </svg>
+        </div>
+        <div>
+          <h1 id="pageTitle">Para Minha Princesa</h1>
+          <p>Uma surpresa interativa — feita com carinho 💖</p>
+        </div>
+      </div><div class="controls">
+    <button class="btn small" id="shareBtn">🔗 Compartilhar</button>
+    <button class="btn ghost small" id="printBtn">🖨️ Imprimir / Salvar PDF</button>
+    <button class="btn small" id="themeBtn">🌙 Tema</button>
+  </div>
+</header>
+
+<section class="content">
+  <div class="visual">
+    <canvas id="canvasHearts" width="1200" height="800" aria-hidden="true"></canvas>
+    <div class="frame">
+      <div class="carousel-wrap">
+        <div class="carousel" id="carousel">
+          <!-- images will be injected by JS for easier customization -->
+        </div>
+        <div class="thumbnails" id="thumbs" role="list"></div>
+      </div>
+
+      <div style="margin-top:12px;width:100%;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap">
+        <button class="btn small" id="prevPhoto">◀️</button>
+        <button class="btn small" id="playPauseSlideshow">⏯️ Pausar</button>
+        <button class="btn small" id="nextPhoto">▶️</button>
+        <button class="btn ghost small" id="surpriseBtn">🎁 Surpresa</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <div>
+        <div class="greeting">💖 Feliz Dia dos Namorados, Mariane</div>
+        <div class="subtitle">Uma carta interativa feita especialmente pra você — personalize, ou apenas aproveite :)</div>
+      </div>
+      <div style="min-width:220px">
+        <div class="audio-player" role="region" aria-label="Player de áudio">
+          <div style="display:flex;flex-direction:column">
+            <strong id="trackTitle">Amor de Verdade - trilha</strong>
+            <small style="color:rgba(255,255,255,0.7)">Toque para controlar</small>
+          </div>
+          <div style="flex:1"></div>
+          <button class="btn small" id="toggleAudio">▶️</button>
+          <div class="progress" aria-hidden="true"><i></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div class="message-box">
+      <div class="message-text" id="messageText" tabindex="0"></div>
+    </div>
+
+    <div class="controls-row">
+      <button class="btn" id="editMsg">✍️ Editar Mensagem</button>
+      <button class="btn ghost" id="typeMsg">🔡 Efeito de Escrita</button>
+      <button class="btn" id="copyBtn">📋 Copiar Texto</button>
+      <button class="btn ghost" id="downloadImages">📥 Baixar Fotos</button>
+    </div>
+
+    <div class="timer" style="margin-top:16px">
+      <div>Nós estamos juntos desde:</div>
+      <div class="big" id="timeCount">—</div>
+    </div>
+
+    <div class="footer-actions">
+      <button class="btn small" id="openFullBtn">🔍 Ver em tela cheia</button>
+      <button class="btn ghost small" id="resetBtn">🔁 Resetar</button>
+    </div>
+
+  </div>
+</section>
+
+  </div>  <!-- Modal senha -->  <div class="modal-overlay" id="modal" role="dialog" aria-modal="true" style="display:flex">
+    <div class="modal">
+      <h3>🔒 Digite a senha para abrir</h3>
+      <p>É só um toque de fofura — coloque a senha e veja sua surpresa.</p>
+      <input id="pwInput" class="input" placeholder="Senha" aria-label="Senha" />
+      <div style="height:12px"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn" id="pwBtn">Entrar</button>
+        <button class="btn ghost" id="pwHint">Dica</button>
+      </div>
+    </div>
+  </div>  <!-- hidden audio element (user may replace path) --><audio id="mainAudio" src="AmorDeVerdade.mp3" crossorigin="anonymous" preload="auto"></audio>
+
+  <script>
+    /* --------------------------------------------------
+       Data / Config
+    -------------------------------------------------- */
+    const CORRECT_PW = '20102021';
+    const START_DATE = new Date('2021-10-20T14:00:00');
+
+    const photos = [
+      {src:'foto1.jpg', caption:'Nosso primeiro passeio'},
+      {src:'foto2.jpg', caption:'Rindo até chorar'},
+      {src:'foto3.jpg', caption:'Noites especiais'},
+      {src:'foto4.jpg', caption:'Pequenos detalhes'},
+      {src:'foto5.jpg', caption:'Aquele abraço'},
+      {src:'foto6.jpg', caption:'Sorrisos que valem tudo'},
+      {src:'foto7.jpg', caption:'Lembra desse dia?'},
+      {src:'foto8.jpg', caption:'E vamos construir mais'}
+    ];
+
+    const defaultMessage = `Minha guerreira preferida, Mariane 💘\n\nOlha... eu sei que a gente briga mais que série de novela mexicana, mas no final das contas, a gente sempre volta igual refrão de funk: grudado, sincero e com amor de verdade. 🥹💥\n\nDesde que você apareceu na minha vida, tudo mudou. Até meu sono ficou bagunçado, porque fico pensando em você antes de dormir, e quando durmo, ainda sonho contigo (e às vezes até acordo bravo achando que briguei contigo no sonho também 😤😂).\n\nVocê me faz sorrir, me faz perder a paciência (várias vezes kkkkk), mas principalmente: me faz acreditar que o amor é mesmo pra ser vivido com intensidade, com zoeira, e com muito carinho. Como diz o MC Kekel:\n\n'Eu te amei, como jamais um outro alguém vai te amar...'\n\nE olha... quem vai te aguentar do jeitinho que você é, com essas crises de ciúmes, essas carinhas bravas e esse coração gigante? Só eu mesmo! E quem vai aguentar minhas manias e esse jeitão todo doido? Só você. Porque o nosso caos combina. ❤️‍🔥\n\nMariane, você é minha treta favorita, minha paz depois da bagunça, e o motivo do meu coração bater mais forte até nas discussões mais bobas.\n\nFeliz Dia dos Namorados, minha princesa briguenta. Que a gente continue se amando do nosso jeitinho torto, mas verdadeiro. Com amor, com risadas, e com reconciliações que sempre valem a pena.\n\nTe amo, viu? Mesmo quando tô emburrado. 😘💘\n\nCom todo carinho,\nSeu Príncipe 🥹😘`;
+
+    // references to DOM
+    const modal = document.getElementById('modal');
+    const pwInput = document.getElementById('pwInput');
+    const pwBtn = document.getElementById('pwBtn');
+    const pwHint = document.getElementById('pwHint');
+
+    const messageText = document.getElementById('messageText');
+    const editMsg = document.getElementById('editMsg');
+    const typeMsg = document.getElementById('typeMsg');
+    const copyBtn = document.getElementById('copyBtn');
+
+    const carouselEl = document.getElementById('carousel');
+    const thumbs = document.getElementById('thumbs');
+    const prevPhoto = document.getElementById('prevPhoto');
+    const nextPhoto = document.getElementById('nextPhoto');
+    const playPauseSlideshow = document.getElementById('playPauseSlideshow');
+
+    const toggleAudio = document.getElementById('toggleAudio');
+    const mainAudio = document.getElementById('mainAudio');
+    const progressBar = document.querySelector('.progress > i');
+
+    const timeCount = document.getElementById('timeCount');
+    const shareBtn = document.getElementById('shareBtn');
+    const printBtn = document.getElementById('printBtn');
+    const themeBtn = document.getElementById('themeBtn');
+    const surpriseBtn = document.getElementById('surpriseBtn');
+    const downloadImages = document.getElementById('downloadImages');
+    const openFullBtn = document.getElementById('openFullBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // internal state
+    let currentIndex = 0;
+    let slideshowRunning = true;
+    let typing = false;
+
+    /* --------------------------------------------------
+       Password modal logic
+    -------------------------------------------------- */
+    pwBtn.addEventListener('click', () => {
+      if (pwInput.value === CORRECT_PW) {
+        modal.style.display = 'none';
+        initPage();
+      } else {
+        pwInput.classList.add('shake');
+        setTimeout(()=>pwInput.classList.remove('shake'),600);
+        alert('Senha incorreta!');
+      }
+    });
+    pwHint.addEventListener('click', ()=>alert('Dica: é a data em que vocês começaram — formato DDMMYYYY.'));
+
+    /* --------------------------------------------------
+       Initialize page (after unlock)
+    -------------------------------------------------- */
+    function initPage(){
+      // render message
+      messageText.textContent = defaultMessage;
+
+      // build carousel
+      photos.forEach((p,i)=>{
+        const img = document.createElement('img');
+        img.dataset.index = i;
+        img.alt = p.caption || ('Foto ' + (i+1));
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.src = p.src;
+        img.style.opacity = '0';
+        img.addEventListener('load', ()=>img.style.opacity='1');
+        carouselEl.appendChild(img);
+
+        // thumbs
+        const t = document.createElement('div'); t.className='thumb'; t.dataset.index=i;
+        const ti = document.createElement('img'); ti.src=p.src; ti.alt=p.caption;
+        t.appendChild(ti); thumbs.appendChild(t);
+        t.addEventListener('click', ()=>showPhoto(i));
+      });
+
+      showPhoto(0);
+      startSlideshow();
+      startTimer();
+      startHearts();
+      startConfettiWhenSurprised();
+
+      // audio controls
+      toggleAudio.addEventListener('click', ()=>{
+        if(mainAudio.paused){mainAudio.volume=0.7;mainAudio.play();toggleAudio.textContent='⏸️';}
+        else {mainAudio.pause();toggleAudio.textContent='▶️'}
+      });
+
+      mainAudio.addEventListener('timeupdate', ()=>{
+        const pct = (mainAudio.currentTime/mainAudio.duration)*100 || 0; progressBar.style.width = pct + '%';
+      });
+
+      // keyboard accessibility for message editing
+      editMsg.addEventListener('click', ()=>{
+        const newMsg = prompt('Edite a mensagem:', messageText.textContent);
+        if(newMsg !== null){ messageText.textContent = newMsg; }
+      });
+
+      copyBtn.addEventListener('click', ()=>{
+        navigator.clipboard.writeText(messageText.textContent).then(()=>{
+          copyBtn.textContent='✔️ Copiado'; setTimeout(()=>copyBtn.textContent='📋 Copiar Texto',1400);
+        });
+      });
+
+      typeMsg.addEventListener('click', ()=>{ if(!typing) typeEffect(messageText.textContent); });
+
+      prevPhoto.addEventListener('click', ()=>showPhoto((currentIndex-1+photos.length)%photos.length));
+      nextPhoto.addEventListener('click', ()=>showPhoto((currentIndex+1)%photos.length));
+      playPauseSlideshow.addEventListener('click', ()=>{ slideshowRunning=!slideshowRunning; playPauseSlideshow.textContent = slideshowRunning ? '⏯️ Pausar':'▶️ Rodar'; if(slideshowRunning) startSlideshow(); });
+
+      shareBtn.addEventListener('click', async ()=>{
+        const shareData = { title: 'Para Minha Princesa', text: 'Uma surpresa que eu fiz pra você 💖', url: location.href };
+        if(navigator.share) await navigator.share(shareData).catch(()=>alert('Não foi possível abrir o menu de compartilhar.'));
+        else { navigator.clipboard.writeText(location.href); alert('Link copiado para a área de transferência'); }
+      });
+
+      printBtn.addEventListener('click', ()=>window.print());
+      themeBtn.addEventListener('click', toggleTheme);
+      surpriseBtn.addEventListener('click', ()=>fireConfetti());
+      downloadImages.addEventListener('click', downloadAllImages);
+      openFullBtn.addEventListener('click', ()=>openFullScreen());
+      resetBtn.addEventListener('click', resetPage);
     }
 
-    #heart-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 9999;
+    /* --------------------------------------------------
+       Carousel functions
+    -------------------------------------------------- */
+    function showPhoto(i){
+      const imgs = carouselEl.querySelectorAll('img');
+      imgs.forEach((img,idx)=>{
+        img.style.position = idx===i ? 'relative':'absolute';
+        img.style.zIndex = idx===i ? 4 : 1;
+        img.style.transform = idx===i ? 'scale(1)' : 'scale(1.06) translateX(' + ((idx<i)?'-8%':'8%') + ')';
+        img.style.opacity = idx===i ? '1' : '0';
+      });
+      currentIndex = i;
+      updateThumbs();
     }
 
-    .heart {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background-color: red;
-      transform: rotate(45deg);
+    function updateThumbs(){
+      const items = thumbs.querySelectorAll('.thumb');
+      items.forEach(t=>t.style.outline='');
+      const current = thumbs.querySelector('.thumb[data-index="'+currentIndex+'"]');
+      if(current) current.style.outline = '3px solid rgba(255,92,138,0.16)';
+    }
+
+    let slideshowTimer = null;
+    function startSlideshow(){
+      if(slideshowTimer) clearInterval(slideshowTimer);
+      slideshowTimer = setInterval(()=>{ if(slideshowRunning) showPhoto((currentIndex+1)%photos.length); }, 5000);
+    }
+
+    /* --------------------------------------------------
+       Timer since relationship started
+    -------------------------------------------------- */
+    function startTimer(){
+      updateTimer(); setInterval(updateTimer,1000);
+    }
+    function updateTimer(){
+      const now = new Date(); let diff = now - START_DATE;
+      const seconds = Math.floor((diff/1000) % 60);
+      const minutes = Math.floor((diff/(1000*60))%60);
+      const hours = Math.floor((diff/(1000*60*60))%24);
+      const days = Math.floor((diff/(1000*60*60*24))%30);
+      const months = Math.floor((diff/(1000*60*60*24*30))%12);
+      const years = Math.floor(diff/(1000*60*60*24*365));
+      timeCount.textContent = `${years} ano(s), ${months} mês(es), ${days} dia(s), ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    /* --------------------------------------------------
+       Typing effect for message
+    -------------------------------------------------- */
+    function typeEffect(text){
+      typing=true; typeMsg.textContent='⌛ Escrevendo...';
+      messageText.textContent='';
+      let i=0; const speed=28 + Math.floor(Math.random()*12);
+      const int = setInterval(()=>{
+        messageText.textContent += text.charAt(i);
+        i++; if(i>=text.length){ clearInterval(int); typing=false; typeMsg.textContent='🔡 Efeito de Escrita'; }
+      }, speed);
+    }
+
+    /* --------------------------------------------------
+       Download images as zip (simple fallback: open in new tab)
+    -------------------------------------------------- */
+    function downloadAllImages(){
+      photos.forEach(p=>window.open(p.src,'_blank'));
+    }
+
+    /* --------------------------------------------------
+       Fullscreen view
+    -------------------------------------------------- */
+    function openFullScreen(){
+      const el = document.documentElement;
+      if(el.requestFullscreen) el.requestFullscreen();
+      else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    }
+
+    function resetPage(){ if(confirm('Resetar a página para o estado inicial?')) location.reload(); }
+
+    /* --------------------------------------------------
+       Theme toggle (dark / light accent)
+    -------------------------------------------------- */
+    let dark = true;
+    function toggleTheme(){
+      dark = !dark;
+      if(dark){ document.documentElement.style.setProperty('--bg-1','linear-gradient(120deg,#0f172a 0%, #1f2937 40%, #3b185f 100%)'); }
+      else{ document.documentElement.style.setProperty('--bg-1','linear-gradient(120deg,#fff 0%, #ffeef6 60%, #ffdfe8 100%)'); }
+      document.body.style.background = getComputedStyle(document.documentElement).getPropertyValue('--bg-1');
+    }
+
+    /* --------------------------------------------------
+       Hearts (canvas) animation
+    -------------------------------------------------- */
+    function startHearts(){
+      const canvas = document.getElementById('canvasHearts');
+      const ctx = canvas.getContext('2d');
+      function resize(){ canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight; }
+      resize(); window.addEventListener('resize', resize);
+
+      const hearts = [];
+      function spawnHeart(){
+        const size = 8 + Math.random()*28;
+        hearts.push({x: Math.random()*canvas.width, y: -40 - Math.random()*200, vy: 0.6 + Math.random()*1.6, vx: (Math.random()-0.5)*0.6, size, angle: Math.random()*Math.PI*2, spin: (Math.random()-0.5)*0.05, lifetime: 0});
+      }
+
+      setInterval(spawnHeart, 120);
+
+      function drawHeart(x,y,size,angle){
+        ctx.save(); ctx.translate(x,y); ctx.rotate(angle);
+        ctx.beginPath();
+        ctx.moveTo(0, -size/2);
+        ctx.bezierCurveTo(size,-size/2, size*1.2,size/3, 0,size);
+        ctx.bezierCurveTo(-size*1.2,size/3, -size,-size/2, 0,-size/2);
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(255,92,138,0.94)';
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function loop(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        for(let i=hearts.length-1;i>=0;i--){
+          const h = hearts[i]; h.y += h.vy; h.x += h.vx + Math.sin(h.lifetime*0.02)*0.6; h.angle += h.spin; h.lifetime++;
+          drawHeart(h.x, h.y, h.size, h.angle);
+          if(h.y - h.size > canvas.height) hearts.splice(i,1);
+        }
+        requestAnimationFrame(loop);
+      }
+      loop();
+    }
+
+    /* --------------------------------------------------
+       Confetti (canvas particles) — fired on surprise
+    -------------------------------------------------- */
+    function startConfettiWhenSurprised(){
+      // create few absolute divs to animate
+      for(let i=0;i<120;i++){
+        const c = document.createElement('div'); c.className='confetti-piece';
+        document.body.appendChild(c);
+      }
+    }
+
+    function fireConfetti(){
+      const pieces = document.querySelectorAll('.confetti-piece');
+      pieces.forEach((p,idx)=>{
+        p.style.left = (50 + Math.random()*80 - 40) + '%'; p.style.top = '-10%'; p.style.opacity=1;
+        p.style.transform = `translateY(${100+Math.random()*200}vh) rotate(${Math.random()*720}deg)`;
+        p.style.width = (4+Math.random()*10)+'px'; p.style.height = (6+Math.random()*14)+'px';
+        p.style.background = ['#ff5c8a','#ffd166','#6ee7b7','#60a5fa'][Math.floor(Math.random()*4)];
+        p.style.transition = `transform ${1.6 + Math.random()*1}s cubic-bezier(.2,.8,.2,1), opacity 1.6s ease`;
+        setTimeout(()=>{ p.style.opacity=0; }, 1500);
+        setTimeout(()=>{ p.remove(); }, 3200+idx*5);
+      });
+    }
+
+    /* --------------------------------------------------
+       Surprise micro-interaction: small sparkle + confetti + sound
+    -------------------------------------------------- */
+    surpriseBtn.addEventListener('click', ()=>{
+      // small sparkle effect
+      const el = document.createElement('div'); el.style.position='absolute'; el.style.left='50%'; el.style.top='10%'; el.style.width='200px'; el.style.height='200px'; el.style.pointerEvents='none'; el.style.borderRadius='50%'; el.style.boxShadow='0 0 120px 30px rgba(255,92,138,0.18)'; document.body.appendChild(el);
+      setTimeout(()=>el.remove(),1200);
+      fireConfetti();
+      // optional sound: play audio from start
+      mainAudio.currentTime = 0; mainAudio.volume = 0.85; mainAudio.play().catch(()=>{});
+    });
+
+    /* --------------------------------------------------
+       Share / Print / Accessibility
+    -------------------------------------------------- */
+    // print handled above, share handled above
+
+    /* --------------------------------------------------
+       Small helpers
+    -------------------------------------------------- */
+    // load default message into textarea for edit
+
+    // initial run if CORRECT_PW already in URL hash (convenience)
+    if(location.hash && location.hash.includes('open')){
+      modal.style.display='none'; initPage();
+    }
+
+    // small CSS for shake (added by JS when needed)
+    const style = document.createElement('style'); style.textContent = `@keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}100%{transform:translateX(0)}} .shake{animation:shake .6s ease}`; document.head.appendChild(style);
+
+    // optional: preconnect to image resources (if hosted externally) - skipped for local images
+
+    // ensure modal is focused
+    pwInput.focus();
+
+    // expose some functions for debugging or quick use via console (optional)
+    window._showPhoto = showPhoto;
+    window._fireConfetti = fireConfetti;
+
+    // accessibility: if user presses Enter while typing password
+    pwInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') pwBtn.click(); });
+
+    // safety: catch global errors and show simple friendly message
+    window.addEventListener('error', (ev)=>{ console.warn('erro na página',ev); });
+
+  </script></body>
+</html>      transform: rotate(45deg);
       animation: fall 5s linear infinite;
       pointer-events: none;
     }
@@ -290,3 +866,4 @@ Com todo carinho, Seu Príncipe 🥹😘"
   </script>
 </body>
 </html>
+
